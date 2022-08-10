@@ -45,5 +45,5 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-lib/chave/projeto-academia-359019-930055432380.json
-lib/chave/key.dart
+lib/utils/chave/key.dart
+lib/utils/chave/projeto-academia-359019-930055432380.json
