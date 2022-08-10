@@ -6,8 +6,7 @@ Um aplicativo simples, feito em [flutter](https://flutter.dev/), que tem como ob
 - Nenhuma ainda rs
 
 ## Funções Planejadas
-- Ler os dados da planilha.
-- Escrever dados na planilha.
+- CRUD da planilha.
 - Reconhecimento de recordes.
 - Montar gráficos com os dados.
 - Reconhecimento de imagem para autopreenchimento dos dados.
