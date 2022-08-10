@@ -1,16 +1,15 @@
 # projeto_academia
 
-A new Flutter project.
+Um aplicativo simples, feito em [flutter](https://flutter.dev/), que tem como objetivo de me ajudar a monitorar meu progresso na academia. Ira interagir com uma planilha no google sheet usando a API "Google Sheets API v4" por meio da package [gsheets](https://pub.dev/packages/gsheets).
 
-## Getting Started
+## Funções Implementadas
+- Nenhuma ainda rs
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Funções Planejadas
+- Ler os dados da planilha.
+- Escrever dados na planilha.
+- Reconhecimento de recordes.
+- Montar gráficos com os dados.
+- Reconhecimento de imagem para autopreenchimento dos dados.
+- Compartilhamento da planilha (por whatsapp).
+- Localização com i18n
