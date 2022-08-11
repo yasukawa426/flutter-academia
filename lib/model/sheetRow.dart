@@ -1,3 +1,6 @@
+
+// ignore_for_file: file_names
+
 ///Representa uma linha na planilha
 class SheetRow {
   final String totalTime;
