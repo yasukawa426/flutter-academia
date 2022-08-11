@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:gsheets/gsheets.dart';
 import 'package:projeto_academia/model/sheetRow.dart';
 import 'package:projeto_academia/utils/chave/key.dart';
 import 'package:projeto_academia/utils/crud/create.dart';
+import 'package:projeto_academia/utils/key/key.dart';
 
 class CreatePage extends StatelessWidget {
   const CreatePage({Key? key}) : super(key: key);
@@ -29,6 +28,7 @@ class _CustomFormState extends State<CustomForm> {
   //Cria uma chave global para indentificar o form e permitir a validação dele
   //Obs: É uma 'GlobalKey<FormState>', não uma 'GlobalKey<CustomFormState>'
   final _formKey = GlobalKey<FormState>();
+  final ScaffoldMessengerState? _scaffold = scaffoldKey.currentState;
   late String time, day, distance, kcal, weight;
   late String? obs;
   late Worksheet sheet;
@@ -186,6 +186,23 @@ class _CustomFormState extends State<CustomForm> {
                                       kcal: kcal,
                                       weight: weight,
                                       obs: obs as String));
+                            }
+
+                            if (success == true) {
+                              _scaffold!.showSnackBar(
+                                const SnackBar(
+                                    backgroundColor: Colors.blue,
+                                    content: Text(
+                                        'Adicionado à planilha com sucesso!')),
+                              );
+                              //Limpa o form
+                              _formKey.currentState!.reset();
+                            } else {
+                              _scaffold!.showSnackBar(
+                                const SnackBar(
+                                    backgroundColor: Colors.red,
+                                    content: Text('Falha ao adicionar :(')),
+                              );
                             }
                           }
                         },
