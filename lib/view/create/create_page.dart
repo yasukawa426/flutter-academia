@@ -167,6 +167,7 @@ class _CustomFormState extends State<CustomForm> {
                           //Validate() retorna true se o form form valido
                           if (_formKey.currentState!.validate()) {
                             late bool success;
+                            
                             if (obs == null || obs == '') {
                               success = await Create.appendRow(
                                   sheet,
