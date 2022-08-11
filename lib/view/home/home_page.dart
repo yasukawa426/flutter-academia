@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
           Center(
             child: ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed('create');
+                  Navigator.of(context).pushNamed('/create');
                 },
                 child: const Text("Adicionar corrida")),
           )
