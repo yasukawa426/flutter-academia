@@ -3,11 +3,11 @@
 Um aplicativo simples, feito em [flutter](https://flutter.dev/), que tem como objetivo de me ajudar a monitorar meu progresso na academia. Ira interagir com uma planilha no google sheet usando a API "Google Sheets API v4" por meio da package [gsheets](https://pub.dev/packages/gsheets).
 
 ## Funções Implementadas
-Ainda nada rs
+ - CRUD da planilha
+   - CREATE
 
 ## Funções Planejadas
 - CRUD da planilha.
-  - CREATE
   - READ
   - UPDATE
   - DELETE
