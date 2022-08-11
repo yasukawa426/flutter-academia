@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:gsheets/gsheets.dart';
+import 'package:projeto_academia/model/sheetRow.dart';
+import 'package:projeto_academia/utils/chave/key.dart';
+import 'package:projeto_academia/utils/crud/create.dart';
 
 class CreatePage extends StatelessWidget {
   const CreatePage({Key? key}) : super(key: key);
@@ -25,6 +29,20 @@ class _CustomFormState extends State<CustomForm> {
   //Cria uma chave global para indentificar o form e permitir a validação dele
   //Obs: É uma 'GlobalKey<FormState>', não uma 'GlobalKey<CustomFormState>'
   final _formKey = GlobalKey<FormState>();
+  late String time, day, distance, kcal, weight;
+  late String? obs;
+  late Worksheet sheet;
+
+  @override
+  void initState() {
+    super.initState();
+    //Acha a planilha
+    final gsheets = GSheets(GoogleKey.credentials);
+    //Pega a primeira folha e salva na variavel [sheet]
+    gsheets
+        .spreadsheet(GoogleKey.spreasheetId)
+        .then((value) => sheet = value.worksheetByIndex(0)!);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,16 +60,18 @@ class _CustomFormState extends State<CustomForm> {
                   children: [
                     //TODO: Corrigir o validator de todos
                     TextFormField(
-                      keyboardType:  TextInputType.datetime,
+                      keyboardType: TextInputType.datetime,
                       decoration: const InputDecoration(
-                        labelText: "Tempo Total (hh:mm:ss)",
-                        border: OutlineInputBorder()
-                      ),
+                          labelText: "Tempo Total (hh:mm:ss)",
+                          border: OutlineInputBorder()),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Por favor, digite um texto';
                         }
                         return null;
+                      },
+                      onChanged: (value) {
+                        time = value;
                       },
                     ),
                     const SizedBox(
@@ -61,30 +81,34 @@ class _CustomFormState extends State<CustomForm> {
                       //TODO: mudar pra um date picker
                       keyboardType: TextInputType.datetime,
                       decoration: const InputDecoration(
-                        labelText: "Dia (dd/mm/ano)",
-                        border: OutlineInputBorder()
-                      ),
+                          labelText: "Dia (dd/mm/ano)",
+                          border: OutlineInputBorder()),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Por favor, digite um texto';
                         }
                         return null;
                       },
+                      onChanged: (value) {
+                        day = value;
+                      },
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     TextFormField(
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
                       decoration: const InputDecoration(
-                        labelText: "Distância",
-                        border: OutlineInputBorder()
-                      ),
+                          labelText: "Distância", border: OutlineInputBorder()),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Por favor, digite um texto';
                         }
                         return null;
+                      },
+                      onChanged: (value) {
+                        distance = value;
                       },
                     ),
                     const SizedBox(
@@ -93,14 +117,16 @@ class _CustomFormState extends State<CustomForm> {
                     TextFormField(
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
-                        labelText: "Kcal Queimada",
-                        border: OutlineInputBorder()
-                      ),
+                          labelText: "Kcal Queimada",
+                          border: OutlineInputBorder()),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Por favor, digite um texto';
                         }
                         return null;
+                      },
+                      onChanged: (value) {
+                        kcal = value;
                       },
                     ),
                     const SizedBox(
@@ -109,41 +135,58 @@ class _CustomFormState extends State<CustomForm> {
                     TextFormField(
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
-                        labelText: "Observações (opcional)",
-                        border: OutlineInputBorder()
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, digite um texto';
-                        }
-                        return null;
+                          labelText: "Observações (opcional)",
+                          border: OutlineInputBorder()),
+                      onChanged: (value) {
+                        obs = value;
                       },
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     TextFormField(
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
                       decoration: const InputDecoration(
-                        labelText: "Peso (kg)",
-                        border: OutlineInputBorder()
-                      ),
+                          labelText: "Peso (kg)", border: OutlineInputBorder()),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Por favor, digite um texto';
                         }
                         return null;
                       },
+                      onChanged: (value) {
+                        weight = value;
+                      },
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           //Validate() retorna true se o form form valido
                           if (_formKey.currentState!.validate()) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Processando dados')));
+                            late bool success;
+                            if (obs == null || obs == '') {
+                              success = await Create.appendRow(
+                                  sheet,
+                                  SheetRow(
+                                      totalTime: time,
+                                      day: day,
+                                      distance: distance,
+                                      kcal: kcal,
+                                      weight: weight));
+                            } else {
+                              success = await Create.appendRow(
+                                  sheet,
+                                  SheetRow(
+                                      totalTime: time,
+                                      day: day,
+                                      distance: distance,
+                                      kcal: kcal,
+                                      weight: weight,
+                                      obs: obs as String));
+                            }
                           }
                         },
                         child: const Text("Finalizar"))
