@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:projeto_academia/utils/key/key.dart';
 import 'package:projeto_academia/utils/routes.dart';
 
@@ -29,6 +30,10 @@ class _MyAppState extends State<MyApp> {
       ),
       routes: routes,
       scaffoldMessengerKey: scaffoldKey,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate
+      ],
+      supportedLocales: const [Locale("pt", "BR"), Locale("en", "US")],
     );
   }
 }
