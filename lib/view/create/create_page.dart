@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gsheets/gsheets.dart';
 import 'package:projeto_academia/components/NavigationRail/custom_navigation_rail.dart';
+import 'package:projeto_academia/controller/create_controller.dart';
 import 'package:projeto_academia/model/sheetRow.dart';
 import 'package:projeto_academia/utils/chave/key.dart';
 import 'package:projeto_academia/utils/crud/create.dart';
@@ -20,7 +21,7 @@ class CreatePage extends StatelessWidget {
             CustomNavigationRail(
               initialIndex: 1,
             ),
-            CustomForm(),
+            SingleChildScrollView(child: CustomForm()),
           ],
         ),
       ),
@@ -40,11 +41,11 @@ class _CustomFormState extends State<CustomForm> {
   //Obs: É uma 'GlobalKey<FormState>', não uma 'GlobalKey<CustomFormState>'
   final _formKey = GlobalKey<FormState>();
   final ScaffoldMessengerState? _scaffold = scaffoldKey.currentState;
-  late String time, distance, kcal, weight;
+  final CreateController _controller = CreateController();
+  late String time, distance, kcal, weight, hour, minute, second;
   late String? obs;
-  String day = "";
   late Worksheet sheet;
-
+  final double width = 50;
   @override
   void initState() {
     super.initState();
@@ -72,21 +73,76 @@ class _CustomFormState extends State<CustomForm> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const Text("Duração (hh:mm:ss)"),
                     //TODO: Corrigir o validator de todos
-                    TextFormField(
-                      keyboardType: TextInputType.datetime,
-                      decoration: const InputDecoration(
-                          labelText: "Tempo Total (hh:mm:ss)",
-                          border: OutlineInputBorder()),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, digite um texto';
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        time = value;
-                      },
+                    SizedBox(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: width,
+                            child: TextFormField(
+                              maxLength: 2,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                  counterText: "",
+                                  labelText: "dd",
+                                  border: OutlineInputBorder()),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Por favor, digite um texto';
+                                }
+                                return null;
+                              },
+                              onChanged: (value) {
+                                hour = value;
+                              },
+                            ),
+                          ),
+                          const Text(":"),
+                          SizedBox(
+                            width: width,
+                            child: TextFormField(
+                              maxLength: 2,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                  counterText: "",
+                                  labelText: "mm",
+                                  border: OutlineInputBorder()),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Por favor, digite um texto';
+                                }
+                                return null;
+                              },
+                              onChanged: (value) {
+                                minute = value;
+                              },
+                            ),
+                          ),
+                          const Text(":"),
+                          SizedBox(
+                            width: width,
+                            child: TextFormField(
+                              maxLength: 2,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                  labelText: "ss",
+                                  border: OutlineInputBorder(),
+                                  counterText: ""),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Por favor, digite um texto';
+                                }
+                                return null;
+                              },
+                              onChanged: (value) {
+                                second = value;
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(
                       height: 10,
@@ -94,10 +150,13 @@ class _CustomFormState extends State<CustomForm> {
                     TextFormField(
                       //TODO: mudar pra um date picker
                       keyboardType: TextInputType.datetime,
-                      key: Key(day.toString()),
-                      onTap: _selectDate,
-                      initialValue: day.toString(),
+                      key: Key(_controller.day.toString()),
+                      onTap: () {
+                        _controller.selectDate(context);
+                      },
+                      initialValue: _controller.day.toString(),
                       decoration: const InputDecoration(
+                          counterText: "",
                           labelText: "Dia (dd/mm/ano)",
                           border: OutlineInputBorder()),
                       validator: (value) {
@@ -107,7 +166,7 @@ class _CustomFormState extends State<CustomForm> {
                         return null;
                       },
                       onChanged: (value) {
-                        day = value;
+                        _controller.day = value;
                       },
                     ),
                     const SizedBox(
@@ -181,6 +240,7 @@ class _CustomFormState extends State<CustomForm> {
                     ),
                     ElevatedButton(
                         onPressed: () async {
+                          time = "$hour:$minute:$second";
                           //Validate() retorna true se o form form valido
                           if (_formKey.currentState!.validate()) {
                             late bool success;
@@ -190,7 +250,7 @@ class _CustomFormState extends State<CustomForm> {
                                   sheet,
                                   SheetRow(
                                       totalTime: time,
-                                      day: day,
+                                      day: _controller.day,
                                       distance: distance,
                                       kcal: kcal,
                                       weight: weight));
@@ -199,7 +259,7 @@ class _CustomFormState extends State<CustomForm> {
                                   sheet,
                                   SheetRow(
                                       totalTime: time,
-                                      day: day,
+                                      day: _controller.day,
                                       distance: distance,
                                       kcal: kcal,
                                       weight: weight,
@@ -231,24 +291,5 @@ class _CustomFormState extends State<CustomForm> {
             ),
           ),
         ));
-  }
-
-  Future<void> _selectDate() async {
-    FocusScope.of(context).requestFocus(FocusNode());
-    DateTime today = DateTime.now();
-    DateTime? picked = await showDatePicker(
-        locale: const Locale("pt", "BR"),
-        context: context,
-        initialDate: today,
-        firstDate: today.subtract(const Duration(days: 2)),
-        lastDate: today.add(const Duration(days: 2)));
-
-    day = picked.toString().trim();
-    day = day.split(" ")[0];
-    List<String> temp = day.split("-");
-    setState(() {
-      day = "${temp[2]}/${temp[1]}/${temp[0]}";
-      print("Data Formatada: $day");
-    });
   }
 }
