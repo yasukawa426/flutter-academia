@@ -40,8 +40,9 @@ class _CustomFormState extends State<CustomForm> {
   //Obs: É uma 'GlobalKey<FormState>', não uma 'GlobalKey<CustomFormState>'
   final _formKey = GlobalKey<FormState>();
   final ScaffoldMessengerState? _scaffold = scaffoldKey.currentState;
-  late String time, day, distance, kcal, weight;
+  late String time, distance, kcal, weight;
   late String? obs;
+  String day = "";
   late Worksheet sheet;
 
   @override
@@ -93,6 +94,9 @@ class _CustomFormState extends State<CustomForm> {
                     TextFormField(
                       //TODO: mudar pra um date picker
                       keyboardType: TextInputType.datetime,
+                      key: Key(day.toString()),
+                      onTap: _selectDate,
+                      initialValue: day.toString(),
                       decoration: const InputDecoration(
                           labelText: "Dia (dd/mm/ano)",
                           border: OutlineInputBorder()),
@@ -227,5 +231,24 @@ class _CustomFormState extends State<CustomForm> {
             ),
           ),
         ));
+  }
+
+  Future<void> _selectDate() async {
+    FocusScope.of(context).requestFocus(FocusNode());
+    DateTime today = DateTime.now();
+    DateTime? picked = await showDatePicker(
+        locale: const Locale("pt", "BR"),
+        context: context,
+        initialDate: today,
+        firstDate: today.subtract(const Duration(days: 2)),
+        lastDate: today.add(const Duration(days: 2)));
+
+    day = picked.toString().trim();
+    day = day.split(" ")[0];
+    List<String> temp = day.split("-");
+    setState(() {
+      day = "${temp[2]}/${temp[1]}/${temp[0]}";
+      print("Data Formatada: $day");
+    });
   }
 }
