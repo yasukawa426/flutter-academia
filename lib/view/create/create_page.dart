@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gsheets/gsheets.dart';
+import 'package:projeto_academia/components/NavigationRail/custom_navigation_rail.dart';
 import 'package:projeto_academia/model/sheetRow.dart';
 import 'package:projeto_academia/utils/chave/key.dart';
 import 'package:projeto_academia/utils/crud/create.dart';
@@ -10,9 +11,19 @@ class CreatePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Criação de corrida")),
-      body: const CustomForm(),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: const Color.fromARGB(252, 223, 141, 167),
+        body: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            CustomNavigationRail(
+              initialIndex: 1,
+            ),
+            CustomForm(),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -46,6 +57,8 @@ class _CustomFormState extends State<CustomForm> {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments;
+    print("args: $args");
     return Form(
         key: _formKey,
         child: Center(
@@ -167,7 +180,7 @@ class _CustomFormState extends State<CustomForm> {
                           //Validate() retorna true se o form form valido
                           if (_formKey.currentState!.validate()) {
                             late bool success;
-                            
+
                             if (obs == null || obs == '') {
                               success = await Create.appendRow(
                                   sheet,
