@@ -42,6 +42,13 @@ class _CustomNavigationRailState extends State<CustomNavigationRail> {
           ),
           label: Text("run"),
         ),
+        NavigationRailDestination(
+          icon: Icon(
+            Icons.book,
+            color: Color.fromARGB(255, 216, 65, 116),
+          ),
+          label: Text("read"),
+        ),
       ],
     );
   }
