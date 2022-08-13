@@ -16,8 +16,8 @@ class Read {
     return sheet.values.row(row);
   }
 
-  ///Carrega uma matriz com todas as colunas
-  static Future<List<List<String>>> readAllRows(Worksheet sheet) {
+  ///Devolve uma lista de lista de colunas. Ex: [[A, A1, A2,], [B, B1, B2,], [C, C1, C2,], [D, D1, D2,],]
+  static Future<List<List<String>>> readAllColumns(Worksheet sheet) {
     return sheet.values.allColumns(length: 6);
   }
 }
