@@ -42,7 +42,8 @@ class _CustomFormState extends State<CustomForm> {
   final _formKey = GlobalKey<FormState>();
   final ScaffoldMessengerState? _scaffold = scaffoldKey.currentState;
   final CreateController _controller = CreateController();
-  late String time, distance, kcal, weight, hour, minute, second;
+  late String time, distance, kcal, weight, minute, second;
+  String hour = "00";
   late String? obs;
   late Worksheet sheet;
   final double width = 50;
@@ -84,9 +85,10 @@ class _CustomFormState extends State<CustomForm> {
                             child: TextFormField(
                               maxLength: 2,
                               keyboardType: TextInputType.number,
+                              initialValue: "00",
                               decoration: const InputDecoration(
                                   counterText: "",
-                                  labelText: "dd",
+                                  labelText: "hh",
                                   border: OutlineInputBorder()),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -148,7 +150,6 @@ class _CustomFormState extends State<CustomForm> {
                       height: 10,
                     ),
                     TextFormField(
-                      //TODO: mudar pra um date picker
                       keyboardType: TextInputType.datetime,
                       key: Key(_controller.day.toString()),
                       onTap: () {
@@ -174,7 +175,7 @@ class _CustomFormState extends State<CustomForm> {
                     ),
                     TextFormField(
                       keyboardType:
-                          const TextInputType.numberWithOptions(decimal: true),
+                          const TextInputType.numberWithOptions(decimal: true ),
                       decoration: const InputDecoration(
                           labelText: "Distância", border: OutlineInputBorder()),
                       validator: (value) {

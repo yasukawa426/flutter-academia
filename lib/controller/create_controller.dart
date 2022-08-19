@@ -2,6 +2,16 @@ import 'package:flutter/material.dart';
 
 class CreateController {
   String day = "";
+  DateTime today = DateTime.now();
+
+
+  
+  CreateController() {
+    day = today.toString().trim();
+    day = day.split(" ")[0];
+    List<String> temp = day.split("-");
+    day = "${temp[2]}/${temp[1]}/${temp[0]}";
+  }
 
   static bool validateDate(String value) {
     return true;
@@ -9,7 +19,6 @@ class CreateController {
 
   Future<void> selectDate(BuildContext context) async {
     FocusScope.of(context).requestFocus(FocusNode());
-    DateTime today = DateTime.now();
     DateTime? picked = await showDatePicker(
         locale: const Locale("pt", "BR"),
         context: context,
