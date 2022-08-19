@@ -17,3 +17,4 @@ Um aplicativo simples, feito em [flutter](https://flutter.dev/), que tem como ob
 - Reconhecimento de imagem para autopreenchimento dos dados.
 - Compartilhamento da planilha (por whatsapp).
 - Localização com i18n
+- Caso eu conseguir um smartwatch. Integração com ele para monitoramento de batimentos cardiacos.
