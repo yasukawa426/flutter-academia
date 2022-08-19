@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gsheets/gsheets.dart';
 import 'package:projeto_academia/components/NavigationRail/custom_navigation_rail.dart';
 import 'package:projeto_academia/controller/create_controller.dart';
+import 'package:projeto_academia/main.dart';
 import 'package:projeto_academia/model/sheetRow.dart';
-import 'package:projeto_academia/utils/chave/key.dart';
 import 'package:projeto_academia/utils/crud/create.dart';
 import 'package:projeto_academia/utils/key/key.dart';
 
@@ -45,18 +44,7 @@ class _CustomFormState extends State<CustomForm> {
   late String time, distance, kcal, weight, minute, second;
   String hour = "00";
   late String? obs;
-  late Worksheet sheet;
   final double width = 50;
-  @override
-  void initState() {
-    super.initState();
-    //Acha a planilha
-    final gsheets = GSheets(GoogleKey.credentials);
-    //Pega a primeira folha e salva na variavel [sheet]
-    gsheets
-        .spreadsheet(GoogleKey.spreasheetId)
-        .then((value) => sheet = value.worksheetByIndex(0)!);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -248,7 +236,7 @@ class _CustomFormState extends State<CustomForm> {
 
                             if (obs == null || obs == '') {
                               success = await Create.appendRow(
-                                  sheet,
+                                  MyApp.sheet,
                                   SheetRow(
                                       totalTime: time,
                                       day: _controller.day,
@@ -257,7 +245,7 @@ class _CustomFormState extends State<CustomForm> {
                                       weight: weight));
                             } else {
                               success = await Create.appendRow(
-                                  sheet,
+                                  MyApp.sheet,
                                   SheetRow(
                                       totalTime: time,
                                       day: _controller.day,
