@@ -18,27 +18,29 @@ class _HomePageState extends State<HomePage> {
           children: [
             const CustomNavigationRail(initialIndex: 0),
             // const VerticalDivider(thickness: 0, width: 3,),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Center(
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pushNamed('/create');
-                      },
-                      child: const Text("Adicionar corrida")),
-                ),
-                Center(
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pushNamed('/read');
-                      },
-                      child: const Text("Ver corridas")),
-                ),
-              ],
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Center(
+                    child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushNamed('/create');
+                        },
+                        child: const Text("Adicionar corrida")),
+                  ),
+                  Center(
+                    child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushNamed('/read');
+                        },
+                        child: const Text("Ver corridas")),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

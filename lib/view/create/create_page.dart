@@ -20,7 +20,7 @@ class CreatePage extends StatelessWidget {
             CustomNavigationRail(
               initialIndex: 1,
             ),
-            SingleChildScrollView(child: CustomForm()),
+            Expanded(child: SingleChildScrollView(child: CustomForm())),
           ],
         ),
       ),
