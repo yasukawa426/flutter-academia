@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gsheets/gsheets.dart';
-import 'package:projeto_academia/components/NavigationRail/custom_navigation_rail.dart';
+import 'package:projeto_academia/view/home/home_init.dart';
 import 'package:projeto_academia/main.dart';
 import 'package:projeto_academia/model/sheetRow.dart';
 import 'package:projeto_academia/utils/crud/read.dart';
@@ -19,27 +19,26 @@ class _ReadPageState extends State<ReadPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
       body: FutureBuilder(
-        future: _getChildren(MyApp.sheet),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Text(snapshot.error.toString());
-          }
-          if (snapshot.connectionState == ConnectionState.done &&
-              snapshot.data is List) {
-            return SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: ListView(
-                children: <Widget>[...snapshot.data as List],
-              ),
-            );
-          }
-          return const CircularProgressIndicator();
-        },
+    future: _getChildren(MyApp.sheet),
+    builder: (context, snapshot) {
+      if (snapshot.hasError) {
+        return Text(snapshot.error.toString());
+      }
+      if (snapshot.connectionState == ConnectionState.done &&
+          snapshot.data is List) {
+        return SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: ListView(
+            children: <Widget>[...snapshot.data as List],
+          ),
+        );
+      }
+      return const CircularProgressIndicator();
+    },
       ),
-    ));
+    );
   }
 
   Future<List<Widget>> _getChildren(Worksheet sheet) async {

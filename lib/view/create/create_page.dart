@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_academia/components/NavigationRail/custom_navigation_rail.dart';
+import 'package:projeto_academia/view/home/home_init.dart';
 import 'package:projeto_academia/controller/create_controller.dart';
 import 'package:projeto_academia/main.dart';
 import 'package:projeto_academia/model/sheetRow.dart';
@@ -11,19 +11,9 @@ class CreatePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color.fromARGB(252, 223, 141, 167),
-        body: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            CustomNavigationRail(
-              initialIndex: 1,
-            ),
-            Expanded(child: SingleChildScrollView(child: CustomForm())),
-          ],
-        ),
-      ),
+    return const Scaffold(
+      backgroundColor:Color.fromARGB(252, 223, 141, 167),
+      body: SingleChildScrollView(child: CustomForm()),
     );
   }
 }
